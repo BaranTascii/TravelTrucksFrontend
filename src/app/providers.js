@@ -1,13 +1,6 @@
 import { Provider } from "react-redux";
-import { BrowserRouter } from "react-router-dom";
-import { store } from "../app/store";
+import { store } from "./store";
 
-const Providers = ({ children }) => {
-  return (
-    <Provider store={store}>
-      <BrowserRouter>{children}</BrowserRouter>
-    </Provider>
-  );
+export const AppProviders = ({ children }) => {
+  return <Provider store={store}>{children}</Provider>;
 };
-
-export default Providers;

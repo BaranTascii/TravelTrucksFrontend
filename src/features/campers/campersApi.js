@@ -1,5 +1,24 @@
-import { api } from "../../services/api";
+import api from "../../services/api";
 
-export const getCampers = (params) => api.get("/campers", { params });
+export const fetchCampersApi = (filters = {}, page = 1, limit = 4) => {
+  const params = {
+    page,
+    limit,
+  };
 
-export const getCamperById = (id) => api.get(`/campers/${id}`);
+  if (filters.location) {
+    params.location = filters.location;
+  }
+
+  if (filters.vehicleType) {
+    params.form = filters.vehicleType;
+  }
+
+  Object.entries(filters.features || {}).forEach(([key, value]) => {
+    if (value) {
+      params[key] = true;
+    }
+  });
+
+  return api.get("/campers", { params });
+};
