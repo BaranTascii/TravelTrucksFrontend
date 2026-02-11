@@ -1,5 +1,9 @@
 import api from "../../services/api";
 
+export const fetchCamperByIdApi = (id) => {
+  return api.get(`/campers/${id}`);
+};
+
 export const fetchCampersApi = (filters = {}, page = 1, limit = 4) => {
   const params = {
     page,
