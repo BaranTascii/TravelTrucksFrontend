@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCamperById } from "../../features/campers/campersSlice";
 import Loader from "../../components/Loader/Loader";
+import ReservationForm from "../../components/ReservationForm/ReservationForm";
 
 const CamperDetails = () => {
   const { id } = useParams();
@@ -25,11 +26,11 @@ const CamperDetails = () => {
   return (
     <section>
       <h1>{name}</h1>
-      <p>{price.toFixed(2)} €</p>
+      <p>{price ? `${price.toFixed(2)} €` : "—"}</p>
 
       {/* Gallery */}
       <div>
-        {gallery.map((img, index) => (
+        {gallery?.map((img, index) => (
           <img key={index} src={img} alt={name} />
         ))}
       </div>
@@ -39,7 +40,7 @@ const CamperDetails = () => {
       {/* Features */}
       <ul>
         {Object.entries(features).map(([key, value]) =>
-          value ? <li key={key}>{key}</li> : null,
+          value ? <li key={key}>{key.replace(/([A-Z])/g, " $1")}</li> : null,
         )}
       </ul>
 
@@ -51,6 +52,7 @@ const CamperDetails = () => {
           </li>
         ))}
       </ul>
+      <ReservationForm />
     </section>
   );
 };
