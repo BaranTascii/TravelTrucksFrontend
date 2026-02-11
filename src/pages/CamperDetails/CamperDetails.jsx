@@ -25,10 +25,11 @@ const CamperDetails = () => {
 
   return (
     <section>
-      <h1>{name}</h1>
-      <p>{price ? `${price.toFixed(2)} €` : "—"}</p>
+      <header>
+        <h1>{name}</h1>
+        <p>{price && `${price.toFixed(2)} €`}</p>
+      </header>
 
-      {/* Gallery */}
       <div>
         {gallery?.map((img, index) => (
           <img key={index} src={img} alt={name} />
@@ -37,14 +38,13 @@ const CamperDetails = () => {
 
       <p>{description}</p>
 
-      {/* Features */}
       <ul>
-        {Object.entries(features).map(([key, value]) =>
-          value ? <li key={key}>{key.replace(/([A-Z])/g, " $1")}</li> : null,
+        {Object.entries(features).map(
+          ([key, value]) =>
+            value && <li key={key}>{key.replace(/([A-Z])/g, " $1")}</li>,
         )}
       </ul>
 
-      {/* Details */}
       <ul>
         {Object.entries(details).map(([key, value]) => (
           <li key={key}>
@@ -52,7 +52,8 @@ const CamperDetails = () => {
           </li>
         ))}
       </ul>
-      <ReservationForm />
+
+      <ReservationForm camperId={id} camperName={name} />
     </section>
   );
 };
