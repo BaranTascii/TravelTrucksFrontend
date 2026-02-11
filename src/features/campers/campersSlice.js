@@ -30,6 +30,7 @@ const campersSlice = createSlice({
   name: "campers",
   initialState: {
     items: [],
+    selectedCamper: null,
     page: 1,
     isLoading: false,
     error: null,
@@ -54,6 +55,18 @@ const campersSlice = createSlice({
         state.items = [...state.items, ...action.payload];
       })
       .addCase(fetchCampers.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchCamperById.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchCamperById.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.selectedCamper = action.payload;
+      })
+      .addCase(fetchCamperById.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       });
