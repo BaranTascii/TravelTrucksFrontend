@@ -1,11 +1,24 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { fetchCampersApi } from "./campersApi";
+import { fetchCamperByIdApi } from "./campersApi";
 
 export const fetchCampers = createAsyncThunk(
   "campers/fetchCampers",
   async ({ filters, page }, thunkAPI) => {
     try {
       const response = await fetchCampersApi(filters, page);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  },
+);
+
+export const fetchCamperById = createAsyncThunk(
+  "campers/fetchCamperById",
+  async (id, thunkAPI) => {
+    try {
+      const response = await fetchCamperByIdApi(id);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
