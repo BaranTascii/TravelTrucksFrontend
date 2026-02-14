@@ -1,19 +1,18 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const BASE_URL = "https://your-api-url.com";
+
 export const createReservation = createAsyncThunk(
   "reservations/createReservation",
-  async (reservationData, thunkAPI) => {
+  async (data, thunkAPI) => {
     try {
-      const response = await axios.post(
-        "https://your-api-url.com/reservations",
-        reservationData
-      );
+      const response = await axios.post(`${BASE_URL}/reservations`, data);
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
+      return thunkAPI.rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 const reservationsSlice = createSlice({
@@ -33,7 +32,6 @@ const reservationsSlice = createSlice({
     builder
       .addCase(createReservation.pending, (state) => {
         state.isLoading = true;
-        state.error = null;
       })
       .addCase(createReservation.fulfilled, (state) => {
         state.isLoading = false;
