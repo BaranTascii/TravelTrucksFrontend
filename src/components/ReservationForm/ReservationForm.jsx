@@ -29,15 +29,9 @@ export default function ReservationForm({ camperId, camperName }) {
     }
   }, [success, dispatch]);
 
-  function handleChange(e) {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    setFormError(""); // clear validation error on change
-  }
+  const today = new Date().toISOString().split("T")[0];
 
   function validateDates() {
-    const today = new Date().toISOString().split("T")[0];
-
     if (formData.startDate < today) {
       return "Start date cannot be in the past.";
     }
@@ -52,19 +46,13 @@ export default function ReservationForm({ camperId, camperName }) {
   function handleSubmit(e) {
     e.preventDefault();
 
-    const dateError = validateDates();
-    if (dateError) {
-      setFormError(dateError);
+    const error = validateDates();
+    if (error) {
+      setFormError(error);
       return;
     }
 
-    dispatch(
-      createReservation({
-        ...formData,
-        camperId,
-        camperName,
-      }),
-    );
+    dispatch(createReservation({ ...formData, camperId, camperName }));
 
     setFormData({
       name: "",
@@ -74,8 +62,6 @@ export default function ReservationForm({ camperId, camperName }) {
     });
   }
 
-  const today = new Date().toISOString().split("T")[0];
-
   return (
     <div>
       <h2>Book {camperName}</h2>
@@ -83,40 +69,34 @@ export default function ReservationForm({ camperId, camperName }) {
       <form onSubmit={handleSubmit}>
         <input
           name="name"
-          placeholder="Your name"
-          value={formData.name}
-          onChange={handleChange}
           required
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
         />
-
         <input
           type="email"
           name="email"
-          placeholder="Your email"
-          value={formData.email}
-          onChange={handleChange}
           required
+          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
         />
-
         <input
           type="date"
-          name="startDate"
           min={today}
-          value={formData.startDate}
-          onChange={handleChange}
+          name="startDate"
           required
+          onChange={(e) =>
+            setFormData({ ...formData, startDate: e.target.value })
+          }
         />
-
         <input
           type="date"
-          name="endDate"
           min={formData.startDate || today}
-          value={formData.endDate}
-          onChange={handleChange}
+          name="endDate"
           required
+          onChange={(e) =>
+            setFormData({ ...formData, endDate: e.target.value })
+          }
         />
-
-        <button type="submit" disabled={isLoading}>
+        <button disabled={isLoading}>
           {isLoading ? "Processing..." : "Reserve"}
         </button>
       </form>
