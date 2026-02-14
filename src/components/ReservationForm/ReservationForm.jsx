@@ -1,7 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  createReservation,
+  resetReservationState,
+} from "../../features/reservations/reservationsSlice";
 import SuccessNotification from "../SuccessNotification/SuccessNotification";
 
-export default function ReservationForm() {
+export default function ReservationForm({ camperId, camperName }) {
+  const dispatch = useDispatch();
+  const { isLoading, error, success } = useSelector(
+    (state) => state.reservations
+  );
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -9,17 +19,52 @@ export default function ReservationForm() {
     endDate: "",
   });
 
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [formError, setFormError] = useState("");
+
+  useEffect(() => {
+    if (success) {
+      setTimeout(() => {
+        dispatch(resetReservationState());
+      }, 3000);
+    }
+  }, [success, dispatch]);
 
   function handleChange(e) {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormError(""); // clear validation error on change
+  }
+
+  function validateDates() {
+    const today = new Date().toISOString().split("T")[0];
+
+    if (formData.startDate < today) {
+      return "Start date cannot be in the past.";
+    }
+
+    if (formData.endDate <= formData.startDate) {
+      return "End date must be after start date.";
+    }
+
+    return null;
   }
 
   function handleSubmit(e) {
     e.preventDefault();
 
-    setIsSuccess(true);
+    const dateError = validateDates();
+    if (dateError) {
+      setFormError(dateError);
+      return;
+    }
+
+    dispatch(
+      createReservation({
+        ...formData,
+        camperId,
+        camperName,
+      })
+    );
 
     setFormData({
       name: "",
@@ -27,13 +72,13 @@ export default function ReservationForm() {
       startDate: "",
       endDate: "",
     });
-
-    setTimeout(() => setIsSuccess(false), 3000);
   }
 
+  const today = new Date().toISOString().split("T")[0];
+
   return (
-    <div className="reservation-form">
-      <h2>Book Your Camper</h2>
+    <div>
+      <h2>Book {camperName}</h2>
 
       <form onSubmit={handleSubmit}>
         <input
@@ -56,6 +101,7 @@ export default function ReservationForm() {
         <input
           type="date"
           name="startDate"
+          min={today}
           value={formData.startDate}
           onChange={handleChange}
           required
@@ -64,15 +110,20 @@ export default function ReservationForm() {
         <input
           type="date"
           name="endDate"
+          min={formData.startDate || today}
           value={formData.endDate}
           onChange={handleChange}
           required
         />
 
-        <button type="submit">Reserve</button>
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? "Processing..." : "Reserve"}
+        </button>
       </form>
 
-      {isSuccess && <SuccessNotification />}
+      {formError && <p style={{ color: "red" }}>{formError}</p>}
+      {success && <SuccessNotification />}
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 }
