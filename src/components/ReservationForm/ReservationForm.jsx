@@ -9,7 +9,7 @@ import SuccessNotification from "../SuccessNotification/SuccessNotification";
 export default function ReservationForm({ camperId, camperName }) {
   const dispatch = useDispatch();
   const { isLoading, error, success } = useSelector(
-    (state) => state.reservations
+    (state) => state.reservations,
   );
 
   const [formData, setFormData] = useState({
@@ -63,7 +63,7 @@ export default function ReservationForm({ camperId, camperName }) {
         ...formData,
         camperId,
         camperName,
-      })
+      }),
     );
 
     setFormData({
