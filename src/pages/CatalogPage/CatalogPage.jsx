@@ -1,49 +1,43 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCampers, resetItems } from "../../store/fleetSlice";
-import CamperCard from "../../components/CamperCard/CamperCard";
+import { fetchCampers } from "../../store/fleetSlice";
 import FilterSidebar from "../../components/FilterSidebar/FilterSidebar";
-import styles from "./CatalogPage.module.css";
+import CamperCard from "../../components/CamperCard/CamperCard";
+import Loader from "../../components/Loader/Loader";
+import s from "./CatalogPage.module.css";
 
 const CatalogPage = () => {
   const dispatch = useDispatch();
-  const { items, loading, hasMore } = useSelector((state) => state.campers);
-  const [page, setPage] = useState(1);
-  const [filters, setFilters] = useState({});
+  const {
+    items: campers,
+    loading,
+    error,
+  } = useSelector((state) => state.fleet);
 
   useEffect(() => {
-    dispatch(fetchCampers({ page, filters }));
-  }, [dispatch, page, filters]);
+    dispatch(fetchCampers());
+  }, [dispatch]);
 
-  const handleSearch = (newFilters) => {
-    dispatch(resetItems());
-    setPage(1);
-    setFilters(newFilters);
+  const handleLoadMore = () => {
+    console.log(
+      "Load more functionality to be implemented with backend pagination.",
+    );
   };
 
+  if (loading) return <Loader />;
+  if (error) return <p className="container">Error: {error.message}</p>;
+  if (!campers || campers.length === 0)
+    return <p className="container">No campers found.</p>;
+
   return (
-    <div className={styles.pageLayout}>
-      <aside className={styles.sidebarArea}>
-        <FilterSidebar onSearch={handleSearch} />
-      </aside>
-      <main className={styles.mainContent}>
-        <div className={styles.cardsList}>
-          {items.map((camper) => (
-            <CamperCard key={camper.id} camper={camper} />
-          ))}
-        </div>
-        {loading && <p className={styles.statusMsg}>Loading...</p>}
-        {hasMore && !loading && (
-          <button
-            className={styles.loadMoreBtn}
-            onClick={() => setPage((p) => p + 1)}
-          >
-            Load More
-          </button>
-        )}
-      </main>
+    <div className={`${s.catalogLayout} container`}>
+      <FilterSidebar />
+      <div className={s.camperList}>
+        {campers.map((camper) => (
+          <CamperCard key={camper._id} camper={camper} />
+        ))}
+      </div>
     </div>
   );
 };
-
 export default CatalogPage;
