@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCampers, resetItems } from "../../redux/campersSlice";
+import { fetchCampers, resetItems } from "../../store/fleetSlice";
 import CamperCard from "../../components/CamperCard/CamperCard";
 import FilterSidebar from "../../components/FilterSidebar/FilterSidebar";
 import styles from "./CatalogPage.module.css";

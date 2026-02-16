@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { toggleFavorite } from "../../redux/campersSlice";
+import { toggleFavorite } from "../../store/fleetSlice";
 import { Link } from "react-router-dom";
 import styles from "./CamperCard.module.css";
 
