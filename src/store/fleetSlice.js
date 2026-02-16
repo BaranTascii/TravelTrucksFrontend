@@ -43,10 +43,9 @@ const campersSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchCampers.fulfilled, (state, action) => {
-        state.loading = false;
-        state.items = [...state.items, ...action.payload];
-        if (action.payload.length < 4) state.hasMore = false;
-      })
+  state.loading = false;
+  state.items = Array.isArray(action.payload) ? action.payload : action.payload.items || [];
+})
       .addCase(fetchCampers.rejected, (state) => {
         state.loading = false;
       });
