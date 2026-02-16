@@ -1,7 +1,20 @@
-import AppRouter from "./routes/AppRouter";
+import { Routes, Route } from "react-router-dom";
+import Header from "./components/Header/Header";
+import HomePage from "./pages/HomePage/HomePage";
+import CatalogPage from "./pages/CatalogPage/CatalogPage";
+import DetailsPage from "./pages/DetailsPage/DetailsPage";
 
-const App = () => {
-  return <AppRouter />;
-};
-
+function App() {
+  return (
+    <>
+      <Header />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/catalog" element={<CatalogPage />} />
+        <Route path="/catalog/:id" element={<DetailsPage />} />
+        <Route path="*" element={<HomePage />} />
+      </Routes>
+    </>
+  );
+}
 export default App;
