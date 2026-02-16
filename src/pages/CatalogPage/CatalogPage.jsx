@@ -1,35 +1,49 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchCampers,
-  incrementPage,
-} from "../../features/campers/campersSlice";
+import { fetchCampers, resetItems } from "../../redux/campersSlice";
+import CamperCard from "../../components/CamperCard/CamperCard";
+import FilterSidebar from "../../components/FilterSidebar/FilterSidebar";
+import styles from "./CatalogPage.module.css";
 
-const Catalog = () => {
+const CatalogPage = () => {
   const dispatch = useDispatch();
-  const { items, page, isLoading } = useSelector((state) => state.campers);
-  const filters = useSelector((state) => state.filters);
+  const { items, loading, hasMore } = useSelector((state) => state.campers);
+  const [page, setPage] = useState(1);
+  const [filters, setFilters] = useState({});
 
   useEffect(() => {
-    dispatch(fetchCampers({ filters, page }));
-  }, []);
+    dispatch(fetchCampers({ page, filters }));
+  }, [dispatch, page, filters]);
 
-  const loadMore = () => {
-    dispatch(incrementPage());
-    dispatch(fetchCampers({ filters, page: page + 1 }));
+  const handleSearch = (newFilters) => {
+    dispatch(resetItems());
+    setPage(1);
+    setFilters(newFilters);
   };
 
   return (
-    <>
-      <ul>
-        {items.map((item) => (
-          <li key={item.id}>{item.name}</li>
-        ))}
-      </ul>
-
-      <button onClick={loadMore}>Load More</button>
-    </>
+    <div className={styles.pageLayout}>
+      <aside className={styles.sidebarArea}>
+        <FilterSidebar onSearch={handleSearch} />
+      </aside>
+      <main className={styles.mainContent}>
+        <div className={styles.cardsList}>
+          {items.map((camper) => (
+            <CamperCard key={camper.id} camper={camper} />
+          ))}
+        </div>
+        {loading && <p className={styles.statusMsg}>Loading...</p>}
+        {hasMore && !loading && (
+          <button
+            className={styles.loadMoreBtn}
+            onClick={() => setPage((p) => p + 1)}
+          >
+            Load More
+          </button>
+        )}
+      </main>
+    </div>
   );
 };
 
-export default Catalog;
+export default CatalogPage;

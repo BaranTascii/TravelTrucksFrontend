@@ -1,31 +1,39 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { toggleFavorite } from '../../redux/campersSlice';
-import { Link } from 'react-router-dom';
-import styles from './CamperCard.module.css';
+import { useDispatch, useSelector } from "react-redux";
+import { toggleFavorite } from "../../redux/campersSlice";
+import { Link } from "react-router-dom";
+import styles from "./CamperCard.module.css";
 
 const CamperCard = ({ camper }) => {
   const dispatch = useDispatch();
-  const isFavorite = useSelector(state => state.campers.favorites.includes(camper.id));
+  const isFavorite = useSelector((state) =>
+    state.campers.favorites.includes(camper.id),
+  );
 
   return (
     <div className={styles.cardContainer}>
-      <img src={camper.gallery[0].original} alt={camper.name} className={styles.thumbnail} />
+      <img
+        src={camper.gallery[0].original}
+        alt={camper.name}
+        className={styles.thumbnail}
+      />
       <div className={styles.detailsContent}>
         <div className={styles.cardHeader}>
           <h2 className={styles.camperTitle}>{camper.name}</h2>
           <div className={styles.priceSection}>
             <span className={styles.priceText}>€{camper.price.toFixed(2)}</span>
-            <button 
-              className={isFavorite ? styles.favBtnActive : styles.favBtn} 
+            <button
+              className={isFavorite ? styles.favBtnActive : styles.favBtn}
               onClick={() => dispatch(toggleFavorite(camper.id))}
             >
-              {isFavorite ? '❤️' : '🤍'}
+              {isFavorite ? "❤️" : "🤍"}
             </button>
           </div>
         </div>
-        
+
         <div className={styles.ratingLocation}>
-          <span className={styles.ratingText}>⭐ {camper.rating} ({camper.reviews.length} Reviews)</span>
+          <span className={styles.ratingText}>
+            ⭐ {camper.rating} ({camper.reviews.length} Reviews)
+          </span>
           <span className={styles.locationText}>📍 {camper.location}</span>
         </div>
 
@@ -37,7 +45,11 @@ const CamperCard = ({ camper }) => {
           <span className={styles.tag}>{camper.transmission}</span>
         </div>
 
-        <Link to={`/catalog/${camper.id}`} target="_blank" className={styles.actionBtn}>
+        <Link
+          to={`/catalog/${camper.id}`}
+          target="_blank"
+          className={styles.actionBtn}
+        >
           Show More
         </Link>
       </div>
