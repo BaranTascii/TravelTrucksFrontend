@@ -5,10 +5,14 @@ const API_URL = "https://66b1f8e71ca8ad33d4f5f63e.mockapi.io/campers";
 
 export const fetchCampers = createAsyncThunk(
   "campers/fetchAll",
-  async ({ page, filters }) => {
-    const params = new URLSearchParams({ page, limit: 4, ...filters });
-    const response = await axios.get(`${API_URL}?${params}`);
-    return response.data;
+  async ({ page = 1, filters = {} }, { rejectWithValue }) => {
+    try {
+      const params = new URLSearchParams({ page, limit: 4, ...filters });
+      const response = await axios.get(`${API_URL}?${params}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
   },
 );
 
@@ -24,7 +28,7 @@ const campersSlice = createSlice({
     toggleFavorite: (state, action) => {
       const id = action.payload;
       state.favorites = state.favorites.includes(id)
-        ? state.favorites.filter((fav) => fav !== id)
+        ? state.favorites.filter((favId) => favId !== id)
         : [...state.favorites, id];
       localStorage.setItem("favorites", JSON.stringify(state.favorites));
     },
@@ -42,6 +46,9 @@ const campersSlice = createSlice({
         state.loading = false;
         state.items = [...state.items, ...action.payload];
         if (action.payload.length < 4) state.hasMore = false;
+      })
+      .addCase(fetchCampers.rejected, (state) => {
+        state.loading = false;
       });
   },
 });
