@@ -1,6 +1,6 @@
 import styles from "./CamperCard.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { toggleFavorite } from "../../redux/favorites/favoritesSlice";
+import { toggleFavorite } from "../../redux/favoritesSlice";
 
 export default function CamperCard({ camper }) {
   const dispatch = useDispatch();
