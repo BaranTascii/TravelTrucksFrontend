@@ -1,32 +1,31 @@
 import styles from "./CamperCard.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleFavorite } from "../../redux/favoritesSlice";
+import heartIcon from "../../assets/icons/heart.svg";
+import filledHeart from "../../assets/icons/heart-filled.svg";
+import { Link } from "react-router-dom";
 
-export default function CamperCard({ camper }) {
+function CamperCard({ camper }) {
   const dispatch = useDispatch();
-  const favorites = useSelector((s) => s.favorites.items);
+  const favorites = useSelector((state) => state.favorites.items);
 
-  const isFav = favorites.includes(camper.id);
+  const isFavorite = favorites.includes(camper.id);
 
   return (
     <div className={styles.card}>
-      <img src={camper.gallery?.[0]} className={styles.image} />
+      <img src={camper.image} alt={camper.name} />
+      <div>
+        <h3>{camper.name}</h3>
+        <p>{camper.price} €</p>
 
-      <div className={styles.info}>
-        <div className={styles.top}>
-          <h3>{camper.name}</h3>
-          <span>${Number(camper.price).toFixed(2)}</span>
-        </div>
-
-        <p className={styles.location}>{camper.location}</p>
-
-        <button
-          className={styles.button}
-          onClick={() => dispatch(toggleFavorite(camper.id))}
-        >
-          {isFav ? "❤️" : "🤍"}
+        <button onClick={() => dispatch(toggleFavorite(camper.id))}>
+          <img src={isFavorite ? filledHeart : heartIcon} alt="favorite" />
         </button>
+
+        <Link to={`/catalog/${camper.id}`}>Show More</Link>
       </div>
     </div>
   );
 }
+
+export default CamperCard;
