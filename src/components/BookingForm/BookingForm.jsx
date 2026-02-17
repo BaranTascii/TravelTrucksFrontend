@@ -1,44 +1,40 @@
-import s from "./BookingForm.module.css";
+import { useState } from "react";
+import styles from "./BookingForm.module.css";
 
-const BookingForm = () => {
+function BookingForm() {
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    date: "",
+    comment: "",
+  });
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert("Thank you for your booking! We will contact you shortly.");
-    e.target.reset();
+    alert("Booking submitted!");
   };
 
   return (
-    <div className={s.formWrapper}>
-      <h3 className={s.formTitle}>Book your campervan now</h3>
-      <p className={s.formSubtitle}>
-        Stay connected! We are always ready to help you.
-      </p>
-
-      <form onSubmit={handleSubmit} className={s.bookingForm}>
-        <input
-          type="text"
-          placeholder="Name*"
-          required
-          className={s.inputField}
-        />
-        <input
-          type="email"
-          placeholder="Email*"
-          required
-          className={s.inputField}
-        />
-        <input
-          type="date"
-          placeholder="Booking date*"
-          required
-          className={s.inputField}
-        />
-        <textarea placeholder="Comment" className={s.textareaField}></textarea>
-        <button type="submit" className={s.submitButton}>
-          Send
-        </button>
-      </form>
-    </div>
+    <form onSubmit={handleSubmit} className={styles.form}>
+      <input
+        placeholder="Name"
+        onChange={(e) => setForm({ ...form, name: e.target.value })}
+      />
+      <input
+        placeholder="Email"
+        onChange={(e) => setForm({ ...form, email: e.target.value })}
+      />
+      <input
+        type="date"
+        onChange={(e) => setForm({ ...form, date: e.target.value })}
+      />
+      <textarea
+        placeholder="Comment"
+        onChange={(e) => setForm({ ...form, comment: e.target.value })}
+      />
+      <button type="submit">Book</button>
+    </form>
   );
-};
+}
+
 export default BookingForm;
