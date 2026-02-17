@@ -1,33 +1,28 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCampers } from "../../redux/campers/campersOperations";
-import Header from "../../components/Header/Header";
+import { fetchCampers } from "../../redux/campersSlice";
 import CamperCard from "../../components/CamperCard/CamperCard";
 import FilterSidebar from "../../components/FilterSidebar/FilterSidebar";
-import Loader from "../../components/Loader/Loader";
 import styles from "./CatalogPage.module.css";
 
-export default function CatalogPage() {
+function CatalogPage() {
   const dispatch = useDispatch();
-  const { items, isLoading, page } = useSelector((s) => s.campers);
+  const { items } = useSelector((state) => state.campers);
 
   useEffect(() => {
-    dispatch(fetchCampers({ page }));
-  }, [dispatch, page]);
+    dispatch(fetchCampers());
+  }, [dispatch]);
 
   return (
-    <>
-      <Header />
-      <div className={styles.wrapper}>
-        <FilterSidebar />
-        <div className={styles.list}>
-          {items.map((camper) => (
-            <CamperCard key={camper.id} camper={camper} />
-          ))}
-
-          {isLoading && <Loader />}
-        </div>
+    <div className={styles.catalog}>
+      <FilterSidebar />
+      <div className={styles.list}>
+        {items.map((camper) => (
+          <CamperCard key={camper.id} camper={camper} />
+        ))}
       </div>
-    </>
+    </div>
   );
 }
+
+export default CatalogPage;
