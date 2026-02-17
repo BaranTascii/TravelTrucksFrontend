@@ -4,37 +4,26 @@ import axios from "axios";
 const API_URL = "https://66b1f8e71ca8ad33d4f5f63e.mockapi.io/campers";
 
 export const fetchCampers = createAsyncThunk(
-  "campers/fetchAll",
-  async ({ page = 1, filters = {} }, { rejectWithValue }) => {
-    try {
-      const params = new URLSearchParams({ page, limit: 4, ...filters });
-      const response = await axios.get(`${API_URL}?${params}`);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
+  "fleet/fetch",
+  async (filters = {}) => {
+    const params = new URLSearchParams();
+    if (filters.location) params.append("location", filters.location);
+    if (filters.form) params.append("form", filters.form);
+
+    const response = await axios.get(API_URL, { params });
+    return Array.isArray(response.data) ? response.data : response.data.items;
   },
 );
 
-const campersSlice = createSlice({
-  name: "campers",
-  initialState: {
-    items: [],
-    favorites: JSON.parse(localStorage.getItem("favorites")) || [],
-    loading: false,
-    hasMore: true,
-  },
+const fleetSlice = createSlice({
+  name: "fleet",
+  initialState: { items: [], favorites: [], loading: false, error: null },
   reducers: {
     toggleFavorite: (state, action) => {
       const id = action.payload;
       state.favorites = state.favorites.includes(id)
         ? state.favorites.filter((favId) => favId !== id)
         : [...state.favorites, id];
-      localStorage.setItem("favorites", JSON.stringify(state.favorites));
-    },
-    resetItems: (state) => {
-      state.items = [];
-      state.hasMore = true;
     },
   },
   extraReducers: (builder) => {
@@ -43,14 +32,15 @@ const campersSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchCampers.fulfilled, (state, action) => {
-  state.loading = false;
-  state.items = Array.isArray(action.payload) ? action.payload : action.payload.items || [];
-})
-      .addCase(fetchCampers.rejected, (state) => {
         state.loading = false;
+        state.items = action.payload;
+      })
+      .addCase(fetchCampers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
       });
   },
 });
 
-export const { toggleFavorite, resetItems } = campersSlice.actions;
-export default campersSlice.reducer;
+export const { toggleFavorite } = fleetSlice.actions;
+export default fleetSlice.reducer;
