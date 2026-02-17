@@ -1,11 +1,11 @@
 import styles from "./Footer.module.css";
 
-function Footer() {
+export default function Footer() {
   return (
     <footer className={styles.footer}>
-      <p>© 2026 TravelTrucks. All rights reserved.</p>
+      <div className={styles.container}>
+        <p>© 2026 TravelTrucks. All rights reserved.</p>
+      </div>
     </footer>
   );
 }
-
-export default Footer;

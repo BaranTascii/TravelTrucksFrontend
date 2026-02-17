@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const filtersSlice = createSlice({
+const slice = createSlice({
   name: "filters",
   initialState: {
     location: "",
@@ -8,18 +8,17 @@ const filtersSlice = createSlice({
     features: {},
   },
   reducers: {
-    setLocation: (state, action) => {
-      state.location = action.payload;
+    setLocation: (s, a) => {
+      s.location = a.payload;
     },
-    setType: (state, action) => {
-      state.type = action.payload;
+    setType: (s, a) => {
+      s.type = a.payload;
     },
-    toggleFeature: (state, action) => {
-      const feature = action.payload;
-      state.features[feature] = !state.features[feature];
+    toggleFeature: (s, a) => {
+      s.features[a.payload] = !s.features[a.payload];
     },
   },
 });
 
-export const { setLocation, setType, toggleFeature } = filtersSlice.actions;
-export default filtersSlice.reducer;
+export const { setLocation, setType, toggleFeature } = slice.actions;
+export default slice.reducer;

@@ -1,10 +1,8 @@
 import styles from "./Reviews.module.css";
-import starIcon from "../../assets/icons/star.svg";
+import ratingIcon from "../../assets/icons/rating.svg";
 
 function Reviews({ reviews }) {
-  if (!reviews || reviews.length === 0) {
-    return <p>No reviews yet.</p>;
-  }
+  if (!reviews?.length) return null;
 
   return (
     <div className={styles.reviews}>
@@ -16,8 +14,10 @@ function Reviews({ reviews }) {
             <strong>{review.reviewer_name}</strong>
 
             <div className={styles.rating}>
-              {Array.from({ length: review.reviewer_rating }).map((_, i) => (
-                <img key={i} src={starIcon} alt="star" />
+              {Array.from({
+                length: review.reviewer_rating,
+              }).map((_, i) => (
+                <img key={i} src={ratingIcon} alt="rating" />
               ))}
             </div>
           </div>

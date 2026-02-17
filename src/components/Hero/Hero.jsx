@@ -1,5 +1,5 @@
 import styles from "./Hero.module.css";
-import heroImg from "../../assets/images/hero.png";
+import heroImage from "../../assets/images/hero.png";
 import { useNavigate } from "react-router-dom";
 
 function Hero() {
@@ -8,7 +8,7 @@ function Hero() {
   return (
     <section
       className={styles.hero}
-      style={{ backgroundImage: `url(${heroImg})` }}
+      style={{ backgroundImage: `url(${heroImage})` }}
     >
       <h1>Travel with Comfort</h1>
       <button onClick={() => navigate("/catalog")}>View Now</button>

@@ -1,5 +1,9 @@
-function Loader() {
-  return <p>Loading...</p>;
-}
+import styles from "./Loader.module.css";
 
-export default Loader;
+export default function Loader() {
+  return (
+    <div className={styles.wrapper}>
+      <div className={styles.spinner}></div>
+    </div>
+  );
+}

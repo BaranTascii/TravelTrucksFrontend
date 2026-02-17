@@ -1,14 +1,14 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCampers, nextPage } from "../../redux/campersSlice";
-import CamperCard from "../../components/CamperCard/CamperCard";
-import FilterSidebar from "../../components/FilterSidebar/FilterSidebar";
-import Loader from "../../components/Loader/Loader";
+import { fetchCampers } from "../../redux/campers/operations";
 import styles from "./CatalogPage.module.css";
+import Loader from "../../components/Loader/Loader";
+import FilterSidebar from "../../components/FilterSidebar/FilterSidebar";
+import CamperList from "../../components/CamperList/CamperList";
 
-function CatalogPage() {
+export default function CatalogPage() {
   const dispatch = useDispatch();
-  const { items, hasMore, status } = useSelector((s) => s.campers);
+  const { items, isLoading } = useSelector((state) => state.campers);
 
   useEffect(() => {
     dispatch(fetchCampers());
@@ -19,26 +19,8 @@ function CatalogPage() {
       <FilterSidebar />
 
       <div className={styles.content}>
-        {items.map((c) => (
-          <CamperCard key={c.id} camper={c} />
-        ))}
-
-        {status === "loading" && <Loader />}
-
-        {hasMore && (
-          <button
-            onClick={() => {
-              dispatch(nextPage());
-              dispatch(fetchCampers());
-            }}
-            className={styles.loadMore}
-          >
-            Load More
-          </button>
-        )}
+        {isLoading ? <Loader /> : <CamperList campers={items} />}
       </div>
     </div>
   );
 }
-
-export default CatalogPage;

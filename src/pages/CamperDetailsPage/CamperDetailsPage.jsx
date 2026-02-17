@@ -1,25 +1,43 @@
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import Reviews from "../../components/Reviews/Reviews";
-import BookingForm from "../../components/BookingForm/BookingForm";
 import styles from "./CamperDetailsPage.module.css";
 
-function CamperDetailsPage() {
-  const { id } = useParams();
-  const camper = useSelector((s) => s.campers.items.find((c) => c.id === id));
+import Reviews from "../../components/Reviews/Reviews";
+import BookingForm from "../../components/BookingForm/BookingForm";
+import ratingIcon from "../../assets/icons/rating.svg";
+import mapIcon from "../../assets/icons/map.svg";
 
-  if (!camper) return <p>Loading...</p>;
+export default function CamperDetailsPage() {
+  const { id } = useParams();
+  const camper = useSelector((state) =>
+    state.campers.items.find((item) => item.id === id),
+  );
+
+  if (!camper) return <p>Not found</p>;
 
   return (
-    <div className={styles.details}>
+    <section className={styles.details}>
       <h2>{camper.name}</h2>
-      <img src={camper.image} alt={camper.name} />
-      <p>{camper.description}</p>
 
-      <Reviews reviews={camper.reviews} />
-      <BookingForm />
-    </div>
+      <div className={styles.meta}>
+        <span>
+          <img src={ratingIcon} alt="rating" />
+          {camper.rating}
+        </span>
+
+        <span>
+          <img src={mapIcon} alt="location" />
+          {camper.location}
+        </span>
+      </div>
+
+      <p className={styles.price}>€{camper.price}</p>
+      <p className={styles.description}>{camper.description}</p>
+
+      <div className={styles.bottom}>
+        <Reviews reviews={camper.reviews} />
+        <BookingForm />
+      </div>
+    </section>
   );
 }
-
-export default CamperDetailsPage;
