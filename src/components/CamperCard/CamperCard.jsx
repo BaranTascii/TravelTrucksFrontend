@@ -1,55 +1,32 @@
+import styles from "./CamperCard.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { toggleFavorite } from "../../store/fleetSlice";
-import s from "./CamperCard.module.css";
+import { toggleFavorite } from "../../redux/favorites/favoritesSlice";
 
-const CamperCard = ({ camper }) => {
+export default function CamperCard({ camper }) {
   const dispatch = useDispatch();
-  const isFavorite = useSelector((state) =>
-    state.fleet.favorites.includes(camper._id),
-  );
+  const favorites = useSelector((s) => s.favorites.items);
 
-  const imageUrl =
-    camper.gallery && camper.gallery.length > 0
-      ? camper.gallery[0]
-      : "https://via.placeholder.com/290x320?text=No+Image";
-
-  const handleShowMore = () => {
-    window.open(`/catalog/${camper._id}`, "_blank");
-  };
+  const isFav = favorites.includes(camper.id);
 
   return (
-    <article className={s.card}>
-      <div className={s.imageWrapper}>
-        <img src={imageUrl} alt={camper.name} className={s.image} />
-      </div>
-      <div className={s.content}>
-        <div className={s.header}>
-          <h2 className={s.title}>{camper.name}</h2>
-          <div className={s.priceGroup}>
-            <span className={s.price}>€{camper.price.toFixed(2)}</span>
-            <button
-              className={`${s.favBtn} ${isFavorite ? s.favBtnActive : ""}`}
-              onClick={() => dispatch(toggleFavorite(camper._id))}
-              aria-label={
-                isFavorite ? "Remove from favorites" : "Add to favorites"
-              }
-            >
-              ❤️
-            </button>
-          </div>
+    <div className={styles.card}>
+      <img src={camper.gallery?.[0]} className={styles.image} />
+
+      <div className={styles.info}>
+        <div className={styles.top}>
+          <h3>{camper.name}</h3>
+          <span>${Number(camper.price).toFixed(2)}</span>
         </div>
-        <div className={s.ratingLocation}>
-          <span className={s.rating}>
-            ⭐ {camper.rating} ({camper.reviews.length} Reviews)
-          </span>
-          <span className={s.location}>📍 {camper.location}</span>
-        </div>
-        <p className={s.description}>{camper.description}</p>
-        <button onClick={handleShowMore} className={s.showMoreBtn}>
-          Show More
+
+        <p className={styles.location}>{camper.location}</p>
+
+        <button
+          className={styles.button}
+          onClick={() => dispatch(toggleFavorite(camper.id))}
+        >
+          {isFav ? "❤️" : "🤍"}
         </button>
       </div>
-    </article>
+    </div>
   );
-};
-export default CamperCard;
+}
