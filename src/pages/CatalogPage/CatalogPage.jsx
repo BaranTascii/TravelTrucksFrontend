@@ -1,16 +1,43 @@
-import FilterSidebar from "../../components/FilterSidebar/FilterSidebar";
-import CamperList from "../../components/CamperList/CamperList";
-import styles from "./CatalogPage.module.css";
+import { useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchCampersThunk,
+  fetchCampersThunkNextPage,
+} from "../../redux/campers/campersOps.js";
+import CampersList from "../../components/CampersList/CampersList.jsx";
+import SearchBox from "../../components/SearchBox/SearchBox.jsx";
+import style from "./CatalogPage.module.css";
+import { changePage, selectFilters } from "../../redux/filtersSlice.js";
+import { useLocation } from "react-router-dom";
 
-function CatalogPage() {
+const CatalogPage = () => {
+  const dispatch = useDispatch();
+  const filters = useSelector(selectFilters);
+  const location = useLocation();
+
+  const isFirstRender = useRef(true);
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    if (filters.page === 1) {
+      dispatch(fetchCampersThunk(filters));
+    } else {
+      dispatch(fetchCampersThunkNextPage(filters));
+    }
+  }, [dispatch, filters]);
+
+  const nextPage = () => {
+    dispatch(changePage(filters.page + 1));
+  };
+
   return (
-    <div className={styles.catalogPage}>
-      <div className={styles.container}>
-        <FilterSidebar />
-        <CamperList />
-      </div>
+    <div className={style.container}>
+      <SearchBox key={location.key} />
+      <CampersList nextPage={nextPage} />
     </div>
   );
-}
+};
 
 export default CatalogPage;
