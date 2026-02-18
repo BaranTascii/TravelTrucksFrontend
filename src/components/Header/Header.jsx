@@ -1,34 +1,25 @@
-import { NavLink } from "react-router-dom";
-import styles from "./Header.module.css";
+import { Link, NavLink } from "react-router-dom";
+import style from "./Header.module.css";
+import logo from "../../assets/images/Logo.svg";
 
-function Header() {
+const Header = () => {
+  const navClasses = ({ isActive }) =>
+    isActive ? `${style.link} ${style.active}` : style.link;
   return (
-    <header className={styles.header}>
-      <div className={styles.container}>
-        <div className={styles.logo}>TravelTrucks</div>
-
-        <nav className={styles.nav}>
-          <NavLink
-            to="/"
-            className={({ isActive }) =>
-              isActive ? styles.active : styles.link
-            }
-          >
-            Home
-          </NavLink>
-
-          <NavLink
-            to="/catalog"
-            className={({ isActive }) =>
-              isActive ? styles.active : styles.link
-            }
-          >
-            Catalog
-          </NavLink>
-        </nav>
-      </div>
+    <header className={style.container}>
+      <Link to="/">
+        <img className={style.logo} src={logo} alt="logo" />
+      </Link>
+      <nav className={style.navLinks}>
+        <NavLink to="/" className={navClasses}>
+          Home
+        </NavLink>
+        <NavLink to="/catalog" className={navClasses}>
+          Catalog
+        </NavLink>
+      </nav>
     </header>
   );
-}
+};
 
 export default Header;
