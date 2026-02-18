@@ -1,58 +1,61 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import { createSlice } from "@reduxjs/toolkit";
+import { fetchCampersThunk, fetchCampersThunkNextPage } from "./campersOps";
 
-export const fetchCampers = createAsyncThunk(
-  "campers/fetch",
-  async (_, thunkAPI) => {
-    const { filters, campers } = thunkAPI.getState();
+const handlePending = (state) => {
+  state.isLoading = true;
+  state.error = null;
+};
 
-    const response = await axios.get("/api/campers", {
-      params: {
-        page: campers.page,
-        limit: 4,
-        location: filters.location,
-        type: filters.type,
-        ...filters.features,
-      },
-    });
+const handleRejected = (state, { payload }) => {
+  state.items = [];
+  state.total = 0;
+  state.isLoading = false;
+  state.error = payload;
+};
 
-    return response.data;
-  },
-);
+const initialState = {
+  items: [],
+  total: 0,
+  isLoading: false,
+  error: null,
+};
 
-const slice = createSlice({
+const campersSlice = createSlice({
   name: "campers",
-  initialState: {
-    items: [],
-    page: 1,
-    hasMore: true,
-    status: "idle",
-  },
+  initialState,
   reducers: {
-    resetCampers: (state) => {
+    clearCampers(state) {
       state.items = [];
-      state.page = 1;
-      state.hasMore = true;
-    },
-    nextPage: (state) => {
-      state.page += 1;
+      state.total = 0;
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: (builder) =>
     builder
-      .addCase(fetchCampers.pending, (state) => {
-        state.status = "loading";
+      .addCase(fetchCampersThunk.fulfilled, (state, { payload }) => {
+        state.items = payload.items;
+        state.total = payload.total;
+        state.isLoading = false;
+        state.error = null;
       })
-      .addCase(fetchCampers.fulfilled, (state, action) => {
-        if (action.payload.length === 0) {
-          state.hasMore = false;
-        } else {
-          state.items.push(...action.payload);
-        }
-        state.status = "succeeded";
-      });
-  },
+      .addCase(fetchCampersThunk.pending, handlePending)
+      .addCase(fetchCampersThunk.rejected, handleRejected)
+      .addCase(fetchCampersThunkNextPage.fulfilled, (state, { payload }) => {
+        state.items.push(...payload);
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(fetchCampersThunkNextPage.pending, handlePending)
+      .addCase(fetchCampersThunkNextPage.rejected, handleRejected),
 });
 
-export const { resetCampers, nextPage } = slice.actions;
-export default slice.reducer;
+export const { clearCampers } = campersSlice.actions;
+
+export const campersReducer = campersSlice.reducer;
+
+export const selectCampers = (state) => state.campers.items;
+
+export const selectIsLoading = (state) => state.campers.isLoading;
+
+export const selectError = (state) => state.campers.error;
+
+export const selectTotalCampers = (state) => state.campers.total;

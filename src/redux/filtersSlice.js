@@ -1,24 +1,32 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { PER_PAGE } from "../constants/constants";
 
-const slice = createSlice({
+const initialState = {
+  page: 1,
+  limit: PER_PAGE,
+  location: "",
+  form: "",
+  AC: "",
+  transmission: "",
+  kitchen: "",
+  TV: "",
+  bathroom: "",
+};
+const filtersSlice = createSlice({
   name: "filters",
-  initialState: {
-    location: "",
-    type: "",
-    features: {},
-  },
+  initialState,
   reducers: {
-    setLocation: (s, a) => {
-      s.location = a.payload;
+    changeFilters: (state, { payload }) => {
+      return { ...state, ...payload, page: 1 };
     },
-    setType: (s, a) => {
-      s.type = a.payload;
-    },
-    toggleFeature: (s, a) => {
-      s.features[a.payload] = !s.features[a.payload];
+    changePage: (state) => {
+      return { ...state, page: state.page + 1 };
     },
   },
 });
 
-export const { setLocation, setType, toggleFeature } = slice.actions;
-export default slice.reducer;
+export const filtersReducer = filtersSlice.reducer;
+
+export const { changeFilters, changePage } = filtersSlice.actions;
+
+export const selectFilters = (state) => state.filters;

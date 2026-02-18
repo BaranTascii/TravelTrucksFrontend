@@ -1,24 +1,37 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 
-const saved = JSON.parse(localStorage.getItem("favorites")) || [];
+const persistConfig = {
+  key: "favorite",
+  storage,
+};
+const initialState = {
+  favoriteCampersList: [],
+};
 
-const slice = createSlice({
-  name: "favorites",
-  initialState: { items: saved },
+const favoriteSlice = createSlice({
+  name: "favorite",
+  initialState,
   reducers: {
-    toggleFavorite: (state, action) => {
-      const id = action.payload;
-
-      if (state.items.includes(id)) {
-        state.items = state.items.filter((i) => i !== id);
-      } else {
-        state.items.push(id);
-      }
-
-      localStorage.setItem("favorites", JSON.stringify(state.items));
+    addFavorite: (state, { payload }) => {
+      state.favoriteCampersList.push(payload);
+    },
+    deleteFavorite: (state, { payload }) => {
+      state.favoriteCampersList = state.favoriteCampersList.filter(
+        (camper) => camper !== payload,
+      );
     },
   },
 });
 
-export const { toggleFavorite } = slice.actions;
-export default slice.reducer;
+export const favoriteReducer = favoriteSlice.reducer;
+
+export const persistedFavoriteReducer = persistReducer(
+  persistConfig,
+  favoriteReducer,
+);
+
+export const { addFavorite, deleteFavorite } = favoriteSlice.actions;
+
+export const selectFavoriteList = (state) => state.favorite.favoriteCampersList;
