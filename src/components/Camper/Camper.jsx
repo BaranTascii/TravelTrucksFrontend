@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Categories from "../Categories/Categories.jsx";
 import FavoriteBtn from "../FavoriteBtn/FavoriteBtn.jsx";
 import style from "./Camper.module.css";
-import CamperRating from "../CamperRating/CamperRating.jsx";
+import CamperRating from "../CamperRating//CamperRating.jsx";
 
 const Camper = ({ camper, openModal }) => {
   const navigate = useNavigate();
