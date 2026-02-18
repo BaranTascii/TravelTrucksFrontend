@@ -1,14 +1,14 @@
 import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import Header from "./components/Header/Header";
-import Features from "./components/Features/Features";
-import Reviews from "./components/Reviews/Reviews";
-import Loader from "./components/Loader/Loader";
+import Header from "./components/Header/Header.jsx";
+import Features from "./components/Features/Features.jsx";
+import Reviews from "./components/Reviews/Reviews.jsx";
+import Loader from "./components/Loader/Loader.jsx";
 
-const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
-const CatalogPage = lazy(() => import("./pages/CatalogPage/CatalogPage"));
+const HomePage = lazy(() => import("./pages/HomePage/HomePage.jsx"));
+const CatalogPage = lazy(() => import("./pages/CatalogPage/CatalogPage.jsx"));
 const CamperDetailPage = lazy(
-  () => import("./pages/CamperDetailPage/CamperDetailPage"),
+  () => import("./pages/CamperDetailPage/CamperDetailPage.jsx"),
 );
 
 function App() {
