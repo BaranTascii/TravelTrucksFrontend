@@ -14,7 +14,7 @@ const CamperRating = ({ link, rating, reviews, location }) => {
         >
           <use href={"/icons.svg#star"} />
         </svg>
-        <Link classNam={style.link} to={link}>
+        <Link className={style.link} to={link}>
           <p>
             {rating}
             {reviews.length > 0 && `(${reviews.length}) Reviews)`}
