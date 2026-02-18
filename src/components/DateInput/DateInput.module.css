@@ -1,0 +1,26 @@
+.input {
+  width: 527px;
+  padding: 16px;
+  font-size: 16px;
+  border-radius: 12px;
+  background-color: rgb(var(--var-inputs));
+  color: rgb(var(--var-main));
+}
+
+.calendar {
+  border-radius: 20px;
+  overflow: hidden;
+  font-family: inherit;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.day {
+  border-radius: 50%;
+  font-size: 14px;
+  transition: background 0.2s ease;
+}
+
+.day:hover {
+  border-radius: 50%;
+  background-color: rgba(var(--var-main) 0.1);
+}
