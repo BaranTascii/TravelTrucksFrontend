@@ -10,7 +10,6 @@ const CatalogPage = lazy(() => import("./pages/CatalogPage/CatalogPage"));
 const CamperDetailPage = lazy(
   () => import("./pages/CamperDetailPage/CamperDetailPage"),
 );
-const NotFoundPage = lazy(() => import("./pages/NotFoundPage/NotFoundPage"));
 
 function App() {
   return (
@@ -24,7 +23,6 @@ function App() {
           <Route path="reviews" element={<Reviews />} />
           <Route path="" element={<Features />} />
         </Route>
-        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Suspense>
   );
