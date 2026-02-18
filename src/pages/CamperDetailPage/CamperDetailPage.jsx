@@ -1,38 +1,123 @@
-import BookingForm from "../../components/BookingForm/BookingForm";
-import Reviews from "../../components/Reviews/Reviews";
-import styles from "./CamperDetailsPage.module.css";
+import { useEffect, useState } from "react";
+import { NavLink, Outlet, useParams } from "react-router-dom";
+import { fetchCamperById } from "../../api/api.js";
+import { Bounce, ToastContainer } from "react-toastify";
+import Loader from "../../components/Loader/Loader.jsx";
+import BookingForm from "../../components/BookingForm/BookingForm.jsx";
+import style from "./CamperDetailPage.module.css";
+import CamperRating from "../../components/CamperRating/CamperRating.jsx";
+import Divider from "../../components/Divider/Divider.jsx";
+import ImageModal from "../../components/ImageModal/ImageModal.jsx";
 
-function CamperDetailsPage() {
+const CamperDetailPage = () => {
+  const [camper, setCamper] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [selectedPhoto, setselectedPhoto] = useState(null);
+  const { id } = useParams();
+
+  const openModal = (photo) => {
+    setselectedPhoto(photo);
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+    setselectedPhoto(null);
+  };
+
+  const navClasses = ({ isActive }) =>
+    isActive ? `${style.link} ${style.active}` : style.link;
+
+  useEffect(() => {
+    const getCamper = async () => {
+      try {
+        setIsLoading(true);
+        const data = await fetchCamperById(id);
+        setCamper(data);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    getCamper();
+  }, [id]);
+
   return (
-    <div className={styles.detailsPage}>
-      <div className={styles.container}>
-        <div className={styles.left}>
-          <h1 className={styles.title}>Road Bear C 23-25</h1>
-
-          <div className={styles.meta}>
-            <span>⭐ 4.4 (12 Reviews)</span>
-            <span>📍 Kyiv, Ukraine</span>
+    <div className={style.container}>
+      {isLoading && <Loader />}
+      {error && <p className={style.message}>{error}</p>}
+      {camper && (
+        <div>
+          <section>
+            <div className={style.header}>
+              <h2 className={style.title}>{camper.name}</h2>
+              <CamperRating
+                link="reviews"
+                rating={camper.rating}
+                reviews={camper.reviews}
+                location={camper.location}
+              />
+              <p className={style.price}>€{camper.price}.00</p>
+            </div>
+            <ul className={style.gallery}>
+              {camper.gallery.map((image, idx) => (
+                <li key={`image-${idx}`}>
+                  <img
+                    className={style.image}
+                    src={image.thumb}
+                    alt={camper.name}
+                    height="312"
+                    onClick={() => openModal(image.original)}
+                  />
+                </li>
+              ))}
+            </ul>
+            <div>
+              <p className={style.description}>{camper.description}</p>
+            </div>
+          </section>
+          <div className={style.nav}>
+            <NavLink className={navClasses} to="features">
+              Features
+            </NavLink>
+            <NavLink className={navClasses} to="reviews">
+              Reviews
+            </NavLink>
           </div>
-
-          <div className={styles.gallery}>
-            <div className={styles.image}></div>
-            <div className={styles.image}></div>
-            <div className={styles.image}></div>
+          <Divider width={1312} />
+          <div className={style.details}>
+            <div className={style.detailsItem}>
+              <Outlet context={camper} />
+            </div>
+            <div className={style.detailsItem}>
+              <BookingForm camperName={camper.name} />
+            </div>
           </div>
-
-          <p className={styles.description}>
-            The pictures shown are examples. The actual vehicle may vary.
-          </p>
-
-          <Reviews />
         </div>
-
-        <div className={styles.right}>
-          <BookingForm />
-        </div>
-      </div>
+      )}
+      <ImageModal
+        modalIsOpen={modalIsOpen}
+        closeModal={closeModal}
+        selectedPhoto={selectedPhoto}
+      />
+      <ToastContainer
+        position="top-center"
+        autoClose={8000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={true}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Bounce}
+      />
     </div>
   );
-}
+};
 
-export default CamperDetailsPage;
+export default CamperDetailPage;
