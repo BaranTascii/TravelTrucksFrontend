@@ -1,60 +1,19 @@
-import { useState } from "react";
 import styles from "./BookingForm.module.css";
 
-export default function BookingForm() {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    date: "",
-    comment: "",
-  });
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(form);
-  };
-
+function BookingForm() {
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
-      <h3>Book your camper now</h3>
+    <div className={styles.card}>
+      <h3 className={styles.title}>Book your camper now</h3>
 
-      <input
-        name="name"
-        placeholder="Name"
-        value={form.name}
-        onChange={handleChange}
-        required
-      />
+      <input className={styles.input} placeholder="Name*" />
+      <input className={styles.input} placeholder="Email*" />
+      <input className={styles.input} type="date" />
 
-      <input
-        name="email"
-        type="email"
-        placeholder="Email"
-        value={form.email}
-        onChange={handleChange}
-        required
-      />
+      <textarea className={styles.textarea} placeholder="Comment"></textarea>
 
-      <input
-        name="date"
-        type="date"
-        value={form.date}
-        onChange={handleChange}
-        required
-      />
-
-      <textarea
-        name="comment"
-        placeholder="Comment"
-        value={form.comment}
-        onChange={handleChange}
-      />
-
-      <button type="submit">Send</button>
-    </form>
+      <button className={styles.button}>Send</button>
+    </div>
   );
 }
+
+export default BookingForm;

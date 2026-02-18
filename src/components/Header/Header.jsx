@@ -1,15 +1,11 @@
 import { NavLink } from "react-router-dom";
 import styles from "./Header.module.css";
-import logo from "../../assets/icons/van.svg";
 
-export default function Header() {
+function Header() {
   return (
     <header className={styles.header}>
       <div className={styles.container}>
-        <div className={styles.logo}>
-          <img src={logo} alt="TravelTrucks" />
-          <span>TravelTrucks</span>
-        </div>
+        <div className={styles.logo}>TravelTrucks</div>
 
         <nav className={styles.nav}>
           <NavLink
@@ -34,3 +30,5 @@ export default function Header() {
     </header>
   );
 }
+
+export default Header;

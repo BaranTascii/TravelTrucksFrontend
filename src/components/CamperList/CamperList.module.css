@@ -1,0 +1,22 @@
+.list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.loadMore {
+  align-self: center;
+  padding: 16px 48px;
+  border-radius: 200px;
+  border: 1px solid var(--border);
+  background: var(--white);
+  cursor: pointer;
+  margin-top: 32px;
+  transition: 0.2s;
+}
+
+.loadMore:hover {
+  border-color: var(--button);
+  color: var(--button);
+}

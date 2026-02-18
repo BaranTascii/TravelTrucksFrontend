@@ -1,0 +1,24 @@
+.reviews {
+  margin-top: 32px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.review {
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+.name {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.text {
+  color: var(--text);
+}

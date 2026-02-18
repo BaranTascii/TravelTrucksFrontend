@@ -1,131 +1,51 @@
-.detailsContainer {
-  padding-top: 20px;
-  padding-bottom: 80px;
+.detailsPage {
+  padding: 64px 0;
+}
+
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 64px;
+  display: flex;
+  gap: 64px;
+}
+
+.left {
+  flex: 1;
+}
+
+.right {
+  width: 400px;
+  flex-shrink: 0;
 }
 
 .title {
-  font-size: 28px;
-  margin-bottom: 8px;
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 12px;
 }
 
 .meta {
   display: flex;
-  gap: 16px;
-  margin-bottom: 16px;
-  color: var(--text-gray);
-}
-
-.price {
-  font-size: 28px;
-  font-weight: 600;
-  margin-bottom: 24px;
+  gap: 24px;
+  margin-bottom: 32px;
+  color: var(--text);
 }
 
 .gallery {
   display: flex;
   gap: 16px;
   margin-bottom: 24px;
-  overflow-x: auto;
 }
 
-.galleryImg {
-  width: 290px;
-  height: 310px;
-  object-fit: cover;
-  border-radius: var(--radius-sm);
+.image {
+  width: 100%;
+  height: 240px;
+  background: var(--badges);
+  border-radius: 16px;
 }
 
 .description {
-  color: var(--text-gray);
-  margin-bottom: 44px;
-  max-width: 900px;
-}
-
-.tabs {
-  display: flex;
-  gap: 40px;
-  border-bottom: 1px solid var(--border-light);
-  margin-bottom: 44px;
-}
-
-.tabBtn {
-  background: none;
-  font-size: 20px;
-  font-weight: 600;
-  padding-bottom: 24px;
-  color: var(--text-main);
-  position: relative;
-}
-
-.activeTab::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 5px;
-  background-color: var(--primary-color);
-}
-
-.bottomSection {
-  display: flex;
-  gap: 64px;
-}
-
-.infoArea {
-  flex: 1;
-}
-
-.formArea {
-  width: 450px;
-}
-
-.badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 44px;
-}
-
-.badge {
-  padding: 12px 18px;
-  background-color: var(--bg-light);
-  border-radius: 100px;
-  font-weight: 500;
-}
-
-.detailsList {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.detailsList li {
-  display: flex;
-  justify-content: space-between;
-  font-size: 18px;
-  font-weight: 500;
-}
-
-.reviewCard {
-  margin-bottom: 24px;
-}
-
-.reviewerHeader {
-  display: flex;
-  gap: 16px;
-  margin-bottom: 16px;
-}
-
-.avatar {
-  width: 60px;
-  height: 60px;
-  background-color: var(--bg-light);
-  color: var(--primary-color);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  font-weight: 600;
+  margin-bottom: 40px;
+  color: var(--text);
 }

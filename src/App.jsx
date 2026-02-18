@@ -1,6 +1,6 @@
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
-import AppRouter from "./components/AppRouter/AppRouter";
+import AppRouter from "./routes/AppRouter";
 
 function App() {
   return (
